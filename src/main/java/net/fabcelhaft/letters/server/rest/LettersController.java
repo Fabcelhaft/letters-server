@@ -28,7 +28,7 @@ public class LettersController {
         this.lettersInitializer = lettersInitializer;
     }
 
-    @PutMapping("/")
+    @PutMapping("/message")
     public void createMessage(@RequestBody MessageCreationData messageCreationData){
         User userByMail = userRepository.findUserByMail(messageCreationData.getMail());
         if(userByMail==null){
@@ -50,7 +50,7 @@ public class LettersController {
         //TODO Aitareko
     }
 
-    @GetMapping("")
+    @GetMapping("/publicKey/{mail}")
     public Key getPublicKey(@PathVariable String mail){
         User userByMail = userRepository.findUserByMail(mail);
         if (userByMail==null){
