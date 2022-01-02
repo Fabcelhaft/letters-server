@@ -20,4 +20,6 @@ public class User {
     private String publicKey;
 
     private String privateKey;
+
+    private String salt;
 }
