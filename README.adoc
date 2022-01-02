@@ -1,0 +1,19 @@
+= Letters server
+
+Goal of the letters server is to enable anonymous feedback within a team.
+
+So first step is to configure persistence and a mail server.
+
+Then one need to create a csv file with names and mails for user initialization:
+
+[source, csv]
+----
+Max Mustermann;username1;max.mustermann@example.com
+Marie Musterfrau;username2;marie.musterfrau@example.com
+----
+
+Default it is located `/users.csv`
+
+While server start these users get created, as long as they don't already exist.
+
+For each user a key-pair with a password is generated. Public and private Key are stored in the configured database. The password is sent via mail. The password is *never* persisted.
