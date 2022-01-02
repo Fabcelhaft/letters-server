@@ -8,8 +8,8 @@ Then one need to create a csv file with names and mails for user initialization:
 
 [source, csv]
 ----
-Max Mustermann;username1;max.mustermann@example.com
-Marie Musterfrau;username2;marie.musterfrau@example.com
+Max Mustermann;max.mustermann@example.com
+Marie Musterfrau;marie.musterfrau@example.com
 ----
 
 Default it is located `/users.csv`
