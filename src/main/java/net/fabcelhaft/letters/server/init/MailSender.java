@@ -55,7 +55,7 @@ public class MailSender implements  UserNotificationSender{
     }
 
     @Bean
-    public JavaMailSender getJavaMailSender() {
+    public static JavaMailSender getJavaMailSender(LettersConfig lettersConfig) {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(lettersConfig.getMailserver());
         mailSender.setPort(lettersConfig.getMailport());
