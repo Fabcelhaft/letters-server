@@ -7,6 +7,8 @@ import net.fabcelhaft.letters.server.model.User;
 import net.fabcelhaft.letters.server.repository.MessageRepository;
 import net.fabcelhaft.letters.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,20 +32,21 @@ public class LettersController {
     }
 
     @PutMapping("/message")
-    public void createMessage(@RequestBody MessageCreationData messageCreationData){
-        User userByMail = userRepository.findUserByMail(messageCreationData.getMail());
+    public void createMessage(@RequestBody MessageCreationDataDto messageCreationDataDto){
+        User userByMail = userRepository.findUserByMail(messageCreationDataDto.getMail());
         if(userByMail==null){
-            throw new RuntimeException("user with mail " + messageCreationData.getMail() + " not existent");
+            throw new RuntimeException("user with mail " + messageCreationDataDto.getMail() + " not existent");
         }
         Message message = new Message();
         message.setUser(userByMail);
-        message.setEncryptedContent(messageCreationData.getEncryptedMessage());
+        message.setEncryptedContent(messageCreationDataDto.getEncryptedMessage());
         messageRepository.save(message);
     }
 
     @PostMapping("/reinit")
-    public void RerunInit(){
+    public ResponseEntity<Void> RerunInit(){
         lettersInitializer.initializeUsers();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -52,13 +55,13 @@ public class LettersController {
     }
 
     @GetMapping("/publicKey/{mail}")
-    public Key getPublicKey(@PathVariable String mail){
+    public KeyDto getPublicKey(@PathVariable String mail){
         User userByMail = userRepository.findUserByMail(mail);
         if (userByMail==null){
             return null;
         }
         String publicKey = userByMail.getPublicKey();
-        return new Key(publicKey);
+        return new KeyDto(publicKey);
     }
 
     @DeleteMapping("/panic")
