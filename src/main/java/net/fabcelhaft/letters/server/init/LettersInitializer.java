@@ -79,7 +79,7 @@ public class LettersInitializer implements ApplicationListener<ApplicationStarte
 
     private User createUserFromCsvLine(String csvLine) {
         String[] values = csvLine.split(";");
-        if(values.length == 2) {
+        if(values.length == 2 && !userRepository.existsById(values[1])) {
             User user = new User();
             user.setDisplayname(values[0]);
             user.setMail(values[1]);
