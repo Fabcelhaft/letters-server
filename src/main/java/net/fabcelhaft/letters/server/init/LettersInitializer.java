@@ -8,6 +8,8 @@ import net.fabcelhaft.letters.server.security.ProtectedKeyPair;
 import net.fabcelhaft.letters.server.security.UserCryptoGenerator;
 import net.fabcelhaft.letters.server.security.UserPasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,7 @@ import java.util.Set;
 
 @Slf4j
 @Service
-public class LettersInitializer {
+public class LettersInitializer implements ApplicationListener<ApplicationStartedEvent> {
 
     private final UserCryptoGenerator userCryptoGenerator;
     private final UserPasswordGenerator userPasswordGenerator;
@@ -34,6 +36,11 @@ public class LettersInitializer {
         this.userPasswordGenerator = userPasswordGenerator;
         this.userRepository = userRepository;
         this.lettersConfig = lettersConfig;
+    }
+
+    @Override
+    public void onApplicationEvent(ApplicationStartedEvent event) {
+        initializeUsers();
     }
 
     @Async
