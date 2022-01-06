@@ -1,7 +1,5 @@
 package net.fabcelhaft.letters.server.rest;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.fabcelhaft.letters.server.init.LettersInitializer;
 import net.fabcelhaft.letters.server.model.Message;
@@ -10,6 +8,9 @@ import net.fabcelhaft.letters.server.repository.MessageRepository;
 import net.fabcelhaft.letters.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -66,17 +67,21 @@ public class LettersController {
         System.exit(0);
     }
 
-    @Data
-    private class MessageCreationData{
-        private String encryptedMessage;
-        private String mail;
+    @GetMapping("users")
+    public ResponseEntity<List<UserDto>> getUsers() {
+        List<UserDto> userDtos = userRepository.findAll().stream()
+                .map(this::getUserDtoFromUserEntity)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(userDtos, HttpStatus.OK);
     }
 
-    @Data
-    @AllArgsConstructor
-    private class Key{
-        private String publicKey;
+    private UserDto getUserDtoFromUserEntity(User userEntity) {
+        UserDto userDto = new UserDto();
+        userDto.setDisplayName(userEntity.getDisplayname());
+        userDto.setMail(userEntity.getMail());
+        return userDto;
     }
+
 }
 
 
